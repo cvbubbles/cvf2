@@ -1,0 +1,74 @@
+{
+  "version": 4,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "msvc-x64",
+      "displayName": "MSVC x64 (VS 2022) + vcpkg",
+      "description": "Visual Studio generator (no Ninja), x64, vcpkg toolchain.",
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/build",
+      "architecture": "x64",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "environment": {
+        "VCPKG_ROOT": "F:/vcpkg/vcpkg"
+      }
+    },
+    {
+      "name": "msvc-x64-relwithdebinfo-noopt",
+      "displayName": "MSVC x64 (RelWithDebInfo no opt)",
+      "inherits": "msvc-x64",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS_RELWITHDEBINFO": "/Od /Zi",
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "/Od /Zi"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "displayName": "Build Debug",
+      "configurePreset": "msvc-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "relwithdebinfo",
+      "displayName": "Build RelWithDebInfo",
+      "configurePreset": "msvc-x64-relwithdebinfo-noopt",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "release",
+      "displayName": "Build Release",
+      "configurePreset": "msvc-x64",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-debug",
+      "displayName": "CTest (Debug)",
+      "configurePreset": "msvc-x64",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "test-relwithdebinfo",
+      "displayName": "CTest (RelWithDebInfo)",
+      "configurePreset": "msvc-x64",
+      "configuration": "RelWithDebInfo",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
