@@ -10,7 +10,6 @@
 #include"opencv2/highgui.hpp"
 using namespace cv;
 
-#include"CVRender/cvrender.h"
 
 #include "BFC/commands.h"
 
@@ -19,7 +18,4 @@ using namespace cv;
 #define _CMDI_END }
 
 
-//#ifndef _WIN32
-#define D_DATA std::string("./data/")
-//#endif
 

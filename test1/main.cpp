@@ -6,7 +6,7 @@ using ff::exec;
 int main()
 {
 	{
-		exec("examples.render.load_and_show_model");
+		//exec("examples.render.load_and_show_model");
 		//exec("examples.render.render_to_image");
 		//exec("examples.render.set_GL_matrix");
 		//exec("examples.render.sample_sphere_views");
@@ -17,6 +17,7 @@ int main()
 
 	{
     	//exec("tests.netcall_1");
+		exec("tests.netcall_reloc");
 	}
 
 	return 0;

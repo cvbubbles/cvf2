@@ -697,6 +697,10 @@ public:
 			return false;
 		return itr->second.get<int>() < 0;
 	}
+	bool hasKey(const std::string &key) const
+	{
+		return this->find(key) != this->end();
+	}
 	bool operator!()
 	{
 		return !hasError();

@@ -1,10 +1,11 @@
 
 #include"appstd.h"
+#include"CVRender/cvrender.h"
 
 
 _CMDI_BEG
 
-std::string dataDir = D_DATA;
+std::string dataDir = "./data/";
 
 void renderExamples_load_and_show_model()
 {
