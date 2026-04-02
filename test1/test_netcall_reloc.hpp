@@ -160,7 +160,7 @@ static void drawMarkerPoseOverlay(cv::Mat &vis, const cv::Mat &poseW2C, const st
 void test_netcall_reloc()
 {
 	{
-		std::string imgDir=R"(F:\dev2\prjs1\data1\office3\scan3\color\)";
+		std::string imgDir=R"(.\data\office3\color\)";
         std::vector<String> imgFiles;
 #if !TEST_NETCALL_RELOC_USE_CAMERA
         cv::glob(imgDir+"*.jpg", imgFiles);
@@ -168,14 +168,14 @@ void test_netcall_reloc()
 #endif
         
         bool showMarkerPose=true;
-        std::string markerPoseFile=imgDir+"/../../hloc_map/sfm_reference/markers.json";
+        std::string markerPoseFile=imgDir+"/../markers.json";
         std::string cameraParams="644.565674,643.857605,657.600647,411.930359";
         auto k=parseCameraParams(cameraParams);
         double fx=k[0], fy=k[1], cx=k[2], cy=k[3];
         std::vector<MarkerQuad> markers = showMarkerPose ? loadMarkerQuads(markerPoseFile) : std::vector<MarkerQuad>();
         if(showMarkerPose) cout<<"loaded markers: "<<markers.size()<<" from "<<markerPoseFile<<endl;
 
-		ff::NetcallServer serv("198.18.0.1", 8000);
+		ff::NetcallServer serv("10.102.33.100", 8000);
 
         cv::VideoCapture cap;
 #if TEST_NETCALL_RELOC_USE_CAMERA
