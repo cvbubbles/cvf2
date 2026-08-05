@@ -154,13 +154,14 @@ static void drawMarkerPoseOverlay(cv::Mat &vis, const cv::Mat &poseW2C, const st
     }
 }
 
-#define TEST_NETCALL_RELOC_USE_CAMERA 1
+#define TEST_NETCALL_RELOC_USE_CAMERA 0
 #define TEST_NETCALL_RELOC_CAMERA_ID 1
 
 void test_netcall_reloc()
 {
 	{
-		std::string imgDir=R"(.\data\office3\color\)";
+		//std::string imgDir1=R"(.\data\office3\color\)";
+        std::string imgDir=R"(F:\dataset\color\)";
         std::vector<String> imgFiles;
 #if !TEST_NETCALL_RELOC_USE_CAMERA
         cv::glob(imgDir+"*.jpg", imgFiles);
@@ -169,13 +170,19 @@ void test_netcall_reloc()
         
         bool showMarkerPose=true;
         std::string markerPoseFile=imgDir+"/../markers.json";
-        std::string cameraParams="644.565674,643.857605,657.600647,411.930359";
+        //std::string cameraModel="PINHOLE", cameraParams="232.26183,232.07349,318.1832,244.91544";
+        //std::string cameraModel="PINHOLE", cameraParams="644.565674,643.857605,657.600647,411.930359";
+        //std::string cameraModel="PINHOLE", cameraParams="386.739441,386.314575,330.560364,247.158218";
+        std::string cameraModel="PINHOLE", cameraParams="479.8412,480.5049,241.1006,322.019";
+        //std::string cameraModel="PINHOLE", cameraParams="480.5049,479.8412,322.019,241.1006";
+        //std::string cameraModel="OPENCV_FISHEYE", cameraParams="281.60213015, 281.37377039, 318.69481832, 243.690702, 0.11946399, 0.06202764, -0.28880297, 0.2142014";
         auto k=parseCameraParams(cameraParams);
         double fx=k[0], fy=k[1], cx=k[2], cy=k[3];
         std::vector<MarkerQuad> markers = showMarkerPose ? loadMarkerQuads(markerPoseFile) : std::vector<MarkerQuad>();
         if(showMarkerPose) cout<<"loaded markers: "<<markers.size()<<" from "<<markerPoseFile<<endl;
 
-		ff::NetcallServer serv("10.102.33.100", 8000);
+		ff::NetcallServer serv("101.76.210.138", 8000);
+        //ff::NetcallServer serv("198.18.0.1", 8000);
 
         cv::VideoCapture cap;
 #if TEST_NETCALL_RELOC_USE_CAMERA
@@ -211,7 +218,7 @@ void test_netcall_reloc()
 
             ff::NetObjs objs = {
                 {"image",ff::nct::Image(image,".jpg")},
-                {"camera_model","PINHOLE"}, 
+                {"camera_model",cameraModel}, 
                 {"camera_params",cameraParams}
             };
             ff::NetObjs ret = serv.call(objs);
@@ -245,6 +252,7 @@ void test_netcall_reloc()
 		serv.sendExit();
     }
 }
+
 
 CMD_BEG()
 CMD0("tests.netcall_reloc", test_netcall_reloc)

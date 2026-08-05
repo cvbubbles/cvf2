@@ -355,7 +355,6 @@ def decodeObjs(data, withHead=True):
 
 
 def recv_all(sock, count):
-    """纭繚浠巗ocket璇诲彇绮剧‘鐨刢ount瀛楄妭"""
     buf = b''
     while count:
         try:
@@ -392,14 +391,13 @@ def recvObjs(rq):
     return decodeObjs(data, False)
 
 def get_ip_address():
-    # 鍒涘缓涓€涓猆DP濂楁帴瀛?
+    # Create a UDP socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
-        # 杩炴帴鍒颁竴涓叕鍏盌NS鏈嶅姟鍣紝浠ユ鑾峰彇鏈満IP鍦板潃
-        s.connect(("8.8.8.8", 80))  # 8.8.8.8鏄胺姝岀殑鍏叡DNS
+        s.connect(("8.8.8.8", 80))  
         ip_address = s.getsockname()[0]
     except Exception as e:
-        print(f"鑾峰彇IP鍦板潃鏃跺嚭閿? {e}")
+        print(f"exception in get_ip_address: {e}")
         ip_address = None
     finally:
         s.close()
@@ -423,7 +421,7 @@ def runServer(handleFunc, port=8000, ip='localhost'):
                         break
 
                     if 'cmd' in objs and objs['cmd'] == 'exit':
-                        print('...disconnet from {}'.format(self.client_address))
+                        print('...disconnected from {}'.format(self.client_address))
                         break
 
                     with func_lock:
@@ -456,7 +454,7 @@ def runServer(handleFunc, port=8000, ip='localhost'):
             if port > 65535:
                 raise Exception('No available ports found')
 
-    print('等待客户端连接...({}:{})'.format(ip, port))
+    print('Waiting for client connection...({}:{})'.format(ip, port))
     try:
         tcp_server.serve_forever()
     except KeyboardInterrupt:
@@ -466,7 +464,6 @@ def runServer(handleFunc, port=8000, ip='localhost'):
 
 def runServerMultiWorkers(workers, port=8000, ip='localhost'):
     """
-    鍚姩澶歐orker鏈嶅姟鍣紙鏂规涓€锛氫换鍔￠槦鍒楁ā寮忥級
     :param workers: list of worker instances (e.g. GpuInferer objects). 
                     Each worker must be callable: result = worker(objs)
     :param port: initial port
@@ -519,7 +516,7 @@ def runServerMultiWorkers(workers, port=8000, ip='localhost'):
         t.start()
         threads.append(t)
     
-    print(f"宸插惎鍔?{len(threads)} 涓悗鍙板伐浣滅嚎绋?")
+    print(f"Started {len(threads)} worker threads")
 
     class NetcallRequestHandler(socketserver.BaseRequestHandler):
         def handle(self):
@@ -531,7 +528,7 @@ def runServerMultiWorkers(workers, port=8000, ip='localhost'):
                         break
 
                     if 'cmd' in objs and objs['cmd'] == 'exit':
-                        print('...disconnet from {}'.format(self.client_address))
+                        print('...disconnected from {}'.format(self.client_address))
                         break
 
                     # --- Submit task to Queue ---
@@ -570,7 +567,7 @@ def runServerMultiWorkers(workers, port=8000, ip='localhost'):
     # but concurrent network I/O is allowed.
     tcp_server = socketserver.ThreadingTCPServer(address, NetcallRequestHandler)
     
-    print('绛夊緟瀹㈡埛绔繛鎺?(Multi-Worker Mode)...({}:{})'.format(ip, port))
+    print('Waiting for client connection...({}:{})'.format(ip, port))
     try:
         tcp_server.serve_forever()
     except KeyboardInterrupt:

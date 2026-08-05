@@ -20,5 +20,8 @@
 #include"BFC/argv.cpp"
 #include"BFC/bfstream.cpp"
 #include"BFC/log.cpp"
+
+#ifndef BFC_NO_COMMANDS
 #include"BFC/commands.cpp"
+#endif
 

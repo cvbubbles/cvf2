@@ -356,27 +356,29 @@ protected:
 
 
 
-template<typename _IBST,typename _ValT>
-inline void _ibfs_dist_unsafe(_IBST &is,_ValT &val,FlagType<true>)
-{
-//	is.Read(&val,sizeof(_ValT),1);
-#ifndef __APPLE__
-	CTCAssert(false);
-#endif
+// template<typename _IBST,typename _ValT>
+// inline void _ibfs_dist_unsafe(_IBST &is,_ValT &val,FlagType<true>)
+// {
+// //	is.Read(&val,sizeof(_ValT),1);
+// #ifndef __APPLE__
+// 	//CTCAssert(false);
+// #endif
     
     
-}
+// }
 
-template<typename _IBST,typename _ValT>
-inline void _ibfs_dist_unsafe(_IBST &is,_ValT &val,FlagType<false>)
-{
-	is.Read(&val,sizeof(_ValT),1);
-}
+// template<typename _IBST,typename _ValT>
+// inline void _ibfs_dist_unsafe(_IBST &is,_ValT &val,FlagType<false>)
+// {
+// 	is.Read(&val,sizeof(_ValT),1);
+// }
 
 template<typename _IBST,typename _ValT>
 inline void BSRead(_IBST &is,_ValT &val)
 {
-	_ibfs_dist_unsafe(is,val,FlagType<!IsMemcpy<_ValT>::Yes>());
+	static_assert(IsMemcpy<_ValT>::Yes, "Unsafe call to BSRead with type that is not memcpy-able!");
+	//_ibfs_dist_unsafe(is,val,FlagType<!IsMemcpy<_ValT>::Yes>());
+	is.Read(&val,sizeof(_ValT),1);
 }
 
 template<typename _ValT,int _N,typename _IBST>
@@ -601,30 +603,33 @@ class _BFC_API OBMStream
 {
 };
 
-template<typename _OBST,typename _ValT>
-inline void 
-#if _MSC_VER>=1400
-__declspec(deprecated("Unsafe call to the output operator(<<) of _OBST!"))
-#endif
-_obfs_dist_unsafe(_OBST &os,const _ValT &val,FlagType<true>)
-{
-//	os.Write(&val,sizeof(val),1);
+// template<typename _OBST,typename _ValT>
+// inline void 
+// #if _MSC_VER>=1400
+// __declspec(deprecated("Unsafe call to the output operator(<<) of _OBST!"))
+// #endif
+// _obfs_dist_unsafe(_OBST &os,const _ValT &val,FlagType<true>)
+// {
+// //	os.Write(&val,sizeof(val),1);
     
-#ifndef __APPLE__
-    CTCAssert(false);
-#endif
-}
+// #ifndef __APPLE__
+//     CTCAssert(false);
+// #endif
+// }
 
-template<typename _OBST,typename _ValT>
-inline void _obfs_dist_unsafe(_OBST &os,const _ValT &val,FlagType<false>)
-{
-	os.Write(&val,sizeof(val),1);
-}
+// template<typename _OBST,typename _ValT>
+// inline void _obfs_dist_unsafe(_OBST &os,const _ValT &val,FlagType<false>)
+// {
+// 	os.Write(&val,sizeof(val),1);
+// }
 
 template<typename _OBST,typename _ValT>
 inline void BSWrite(_OBST &os,const _ValT &val)
 {
-	_obfs_dist_unsafe(os,val,FlagType<!IsMemcpy<_ValT>::Yes>());
+	static_assert(IsMemcpy<_ValT>::Yes, "Unsafe call to BSWrite with type that is not memcpy-able!");
+	//CTCAssert(false);
+	//_obfs_dist_unsafe(os,val,FlagType<!IsMemcpy<_ValT>::Yes>());
+	os.Write(&val,sizeof(val),1);
 }
 
 template<typename _ValT,int _N,typename _OBST>

@@ -76,7 +76,7 @@ _BFCS_API void exec(int argc, char* argv[]);
 
 #define CMD_BEG() namespace _FF_CMD_UNIQUE_NAME(_FFcmd) { static ff::FFCommand::Command cmdtab[]={
 
-#define CMD(cmd, func, defArg, shortHelp, example) ff::FFCommand::Command(cmd,func,ff::FFCommand::getFuncType(func),defArg,shortHelp,example,nullptr),
+#define CMD(cmd, func, defArg, shortHelp, example) ff::FFCommand::Command(cmd,(void*)func,ff::FFCommand::getFuncType(func),defArg,shortHelp,example,nullptr),
 #define CMD0(cmd,func) CMD(cmd,func,"","","")
 
 #define CMD_END() }; FF_ADD_COMMANDS(cmdtab); }

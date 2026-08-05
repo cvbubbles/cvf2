@@ -6,6 +6,7 @@
 #include "BFC/stdf.h"
 #include <memory>
 #include <map>
+#include<type_traits>
 #include "opencv2/highgui.hpp"
 
 #ifndef NETCALL_INCLUDE_SOCKET
@@ -61,7 +62,7 @@ struct nct
 
 	public:
 		template <typename _OpT>
-		typename std::result_of<_OpT(const std::string &)>::type decode(_OpT decodeOp, std::string file = "")
+		std::invoke_result_t<_OpT, const std::string &> decode(const _OpT &decodeOp, std::string file = "")
 		{
 			if (!data || data->empty())
 				FF_EXCEPTION1("file open failed");
@@ -390,7 +391,7 @@ private:
 					 {
 			std::vector<uchar> buf;
 			if (!cv::imencode(m.ext, m, buf))
-				throw std::exception("imencode failed");
+				throw std::runtime_error("imencode failed");
 			
 			(*_stream) << (uint32)buf.size();
 			if (!buf.empty())
