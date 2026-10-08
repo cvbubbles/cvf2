@@ -47,10 +47,11 @@ struct nct
 	{
 	public:
 		std::string ext;
+		std::vector<int> params; // extra cv::imencode parameters, e.g. { cv::IMWRITE_JPEG_QUALITY, 90 }
 
 	public:
-		Image(const cv::Mat &img, const std::string &_ext = ".jpg")
-			: cv::Mat(img), ext(_ext)
+		Image(const cv::Mat &img, const std::string &_ext = ".jpg", const std::vector<int> &_params = {})
+			: cv::Mat(img), ext(_ext), params(_params)
 		{
 		}
 	};
@@ -390,7 +391,7 @@ private:
 		this->_put_x([&m, this](_ObjHead &head)
 					 {
 			std::vector<uchar> buf;
-			if (!cv::imencode(m.ext, m, buf))
+			if (!cv::imencode(m.ext, m, buf, m.params))
 				throw std::runtime_error("imencode failed");
 			
 			(*_stream) << (uint32)buf.size();

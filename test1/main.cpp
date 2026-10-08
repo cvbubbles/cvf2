@@ -17,7 +17,8 @@ int main()
 
 	{
     	//exec("tests.netcall_1");
-		exec("tests.netcall_reloc");
+		//exec("tests.netcall_reloc");
+		exec("tests.imshow_remote");
 	}
 
 	return 0;
